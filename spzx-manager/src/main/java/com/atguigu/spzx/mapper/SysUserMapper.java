@@ -19,5 +19,5 @@ public interface SysUserMapper {
      * @param userName
      * @return
      */
-    public abstract SysUser selectByUserName(String userName) ;
+    public  SysUser selectByUserName(String userName) ;
 }
