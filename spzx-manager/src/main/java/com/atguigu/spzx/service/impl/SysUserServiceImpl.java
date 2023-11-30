@@ -44,7 +44,7 @@ public class SysUserServiceImpl implements SysUserService {
         // 从Redis中获取验证码
         String redisCode = redisTemplate.opsForValue().get("user:login:validatecode:" + codeKey);
         if(StrUtil.isEmpty(redisCode) || !StrUtil.equalsIgnoreCase(redisCode , captcha)) {
-            throw new GuiguException(ResultCodeEnum.VALIDATECODE_ERROR) ;
+            throw new HjException(ResultCodeEnum.VALIDATECODE_ERROR) ;
         }
 
         // 验证通过删除redis中的验证码
