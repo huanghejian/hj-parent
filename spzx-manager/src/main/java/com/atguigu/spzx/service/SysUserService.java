@@ -1,6 +1,7 @@
 package com.atguigu.spzx.service;
 
 import com.atguigu.spzx.model.dto.system.LoginDto;
+import com.atguigu.spzx.model.entity.system.SysUser;
 import com.atguigu.spzx.model.vo.system.LoginVo;
 
 /**
@@ -18,4 +19,6 @@ public interface SysUserService {
      * @return
      */
     public abstract LoginVo login(LoginDto loginDto) ;
+
+    SysUser getUserInfo(String token);
 }

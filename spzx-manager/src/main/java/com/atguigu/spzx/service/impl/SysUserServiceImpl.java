@@ -42,13 +42,13 @@ public class SysUserServiceImpl implements SysUserService {
         String codeKey = loginDto.getCodeKey();     // redis中验证码的数据key
 
         // 从Redis中获取验证码
-        String redisCode = redisTemplate.opsForValue().get("user:login:validatecode:" + codeKey);
+        String redisCode = redisTemplate.opsForValue().get("user:validate" + codeKey);
         if(StrUtil.isEmpty(redisCode) || !StrUtil.equalsIgnoreCase(redisCode , captcha)) {
             throw new HjException(ResultCodeEnum.VALIDATECODE_ERROR) ;
         }
 
         // 验证通过删除redis中的验证码
-        redisTemplate.delete("user:login:validatecode:" + codeKey) ;
+        redisTemplate.delete("user:validate" + codeKey) ;
 
 //..................
         // 根据用户名查询用户
@@ -68,7 +68,10 @@ public class SysUserServiceImpl implements SysUserService {
 
         // 生成令牌，保存数据到Redis中
         String token = UUID.randomUUID().toString().replace("-", "");
-        redisTemplate.opsForValue().set("user:login:" + token , JSON.toJSONString(sysUser) , 30 , TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set("user:login:" + token ,
+                                        //将sysUser转为json
+                                        JSON.toJSONString(sysUser) ,
+                                        30 , TimeUnit.MINUTES);
 
         // 构建响应结果对象
         LoginVo loginVo = new LoginVo() ;
@@ -77,5 +80,13 @@ public class SysUserServiceImpl implements SysUserService {
 
         // 返回
         return loginVo;
+    }
+
+    @Override
+    public SysUser getUserInfo(String token) {
+        // 从Redis中获取用户信息
+        String userJson = redisTemplate.opsForValue().get("user:login:" + token);
+        // 反序列化
+        return JSON.parseObject(userJson , SysUser.class) ;
     }
 }

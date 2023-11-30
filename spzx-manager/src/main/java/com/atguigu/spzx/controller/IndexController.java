@@ -1,6 +1,7 @@
 package com.atguigu.spzx.controller;
 
 import com.atguigu.spzx.model.dto.system.LoginDto;
+import com.atguigu.spzx.model.entity.system.SysUser;
 import com.atguigu.spzx.model.vo.common.Result;
 import com.atguigu.spzx.model.vo.common.ResultCodeEnum;
 import com.atguigu.spzx.model.vo.system.LoginVo;
@@ -47,4 +48,9 @@ import org.springframework.web.bind.annotation.*;
             LoginVo loginVo = sysUserService.login(loginDto) ;
             return Result.build(loginVo , ResultCodeEnum.SUCCESS) ;
         }
+    @GetMapping(value = "/getUserInfo")
+    public Result<SysUser> getUserInfo(@RequestHeader(name = "token") String token){
+        SysUser sysUser = sysUserService.getUserInfo(token) ;
+        return Result.build(sysUser , ResultCodeEnum.SUCCESS) ;
+    }
 }
