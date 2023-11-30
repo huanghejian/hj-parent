@@ -10,11 +10,12 @@ spring:
     url: jdbc:mysql://192.168.19.101:3306/db_spzx?characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
     username: root
     password: 123456
-  # Redis的相关配置
+#  # Redis的相关配置
   data:
     redis:
       host: 192.168.19.101
       port: 6379
+
 #  password: 1234
 
 # mybatis的配置

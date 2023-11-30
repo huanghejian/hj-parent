@@ -30,8 +30,10 @@ import org.springframework.web.bind.annotation.*;
         @Autowired
         private SysUserService sysUserService ;
 
-        @Autowired
-        private ValidateCodeService validateCodeService ;
+
+
+    @Autowired
+    private ValidateCodeService validateCodeService;
 
     @GetMapping(value = "/generateValidateCode")
     public Result<ValidateCodeVo> generateValidateCode() {

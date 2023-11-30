@@ -1,5 +1,6 @@
 package com.atguigu.spzx.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.atguigu.spzx.common.exception.HjException;
 import com.atguigu.spzx.mapper.SysUserMapper;
@@ -36,6 +37,20 @@ public class SysUserServiceImpl implements SysUserService {
     @Override
     public LoginVo login(LoginDto loginDto) {
 
+        // 校验验证码是否正确
+        String captcha = loginDto.getCaptcha();     // 用户输入的验证码
+        String codeKey = loginDto.getCodeKey();     // redis中验证码的数据key
+
+        // 从Redis中获取验证码
+        String redisCode = redisTemplate.opsForValue().get("user:login:validatecode:" + codeKey);
+        if(StrUtil.isEmpty(redisCode) || !StrUtil.equalsIgnoreCase(redisCode , captcha)) {
+            throw new GuiguException(ResultCodeEnum.VALIDATECODE_ERROR) ;
+        }
+
+        // 验证通过删除redis中的验证码
+        redisTemplate.delete("user:login:validatecode:" + codeKey) ;
+
+//..................
         // 根据用户名查询用户
         SysUser sysUser = sysUserMapper.selectByUserName(loginDto.getUserName());
         if(sysUser == null) {
